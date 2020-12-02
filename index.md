@@ -69,7 +69,10 @@ Synoniem: publish-subscribe
 - Als het notificeren van observers (te) complex wordt kan een apart object ('change manager') worden ingeschakeld; er is dan sprake van een ChangeManager-gebaseerde implementatie van het Observer patroon.
 - Voorbeelden van gebruik van het Observer patroon zijn het Model-View-Controller model bij bij softwareontwikkeling en Publish-Subscribe mechanismen voor notificatie
 
-![Observer pattern](/images/observer.png)
+![Observer pattern](images/observer.png)
+<img src="/images/observer.png" alt="Observer pattern" style="height: 100px; width:100px;"/>
+![Observer pattern](/images/observer.png?raw=true "Observer pattern")
+<img src="https://github.com/adgerrits/notificatiepatronen/blob/main/images/observer.png" alt="observer"/>
 
 ####
 
