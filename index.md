@@ -72,7 +72,7 @@ Synoniem: publish-subscribe
 ![Observer pattern](images/observer.png)
 <img src="/img/observer.png" alt="Observer pattern" style="height: 100px; width:100px;"/>
 ![Observer pattern](/images/observer.png?raw=true "Observer pattern")
-[[https://github.com/adgerrits/notificatiepatronen/blob/main/img/observer.png|alt=observer]]
+<img src="https://github.com/adgerrits/notificatiepatronen/blob/main/img/observer.png" alt="observer"/>
 
 ####
 
