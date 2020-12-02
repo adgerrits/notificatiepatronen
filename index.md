@@ -17,8 +17,6 @@ Gebeurtenis-gedreven architectuur
 Notificeren
 : Het op de hoogte brengen van een partij van een plaatsgevonden gebeurtenis.
 
-Hierna worden patronen die bruikbaar zijn bij het ontwerpen van oplossingen voor het notificeren van systemen. 
-
 # Integratie-stijlen
 Notificeren is een mechanisme om integratie tussen applicaties te realiseren door op een afgesproken manier gegevens met elkaar uit te wisselen.
 We onderscheiden 4 soorten integratiestijlen:
@@ -27,11 +25,50 @@ We onderscheiden 4 soorten integratiestijlen:
 3. Externe applicatiefunctionaliteit aanroep ('Remote Procedure Invocation'): Applicaties roepen elkaar via beschikbare interfaces aan om gegevens uit te wisselen.
 4. Berichtuitwisseling ('Messaging'): Applicaties wisselen berichten met gegevens met elkaar uit.
 
-Alle vier de integratiestijlen kunnen bruikbaar zijn om oplossingen voor notificeren mee te realiseren. Ze zijn echter niet allemaal even geschikt en ook niet altijd bruikbaar. Binnen de context van overheidsbreed notificeren geldt voor de verschillende stijlen dat:
-- 'Gedeelde database' stijl is niet bruikbaar omdat betrokken applicaties daarbij toegang moeten hebben tot dezelfde database. Iets dat vaak onwenselijk of onmogelijk is. We laten deze stijl daarom hier verder buiten beschouwing.
-- 'Bestandsuitwisseling' is bruikbaar wanneer als er geen noodzaak is om snel na het optreden van gebeurtenissen te notificeren en/of als het gaat om heel grote hoeveelheden gegevens. In lijn met het uitgangspunt dat we gegevens zoveel mogelijk bevragen bij bronregistraties en onnodig dupliceren van gegevens willen voorkomen zien we deze stijl in de meeste situaties als onwenselijk.
-- 'Externe applicatiefunctionaliteit aanroep' is bruikbaar voor notificeren maar heeft in veel situaties als belangrijk nadeel dat er ongewenste afhankelijkheid tussen applicaties ontstaat. Bijv. omdat een aangeroepen applicatie beschikbaar moet zijn op het moment van aanroep om gegevensuitwisseling te kunnen laten slagen. 
-- 'Berichtuitwisseling' is in het algemeen de meest wenselijke integratiestijl, ook voor oplossingen voor notificeren. Door gegevens in zelfstandig te verwerken berichten te vatten zijn betrouwbare oplossingen te realiseren waarbij betrokken applicaties los van elkaar kunnen functioneren en specialistische functionaliteit bij verschillende applicaties is te beleggen. Zeker wanneer gebruik wordt gemaakt van asynchroon berichtenverkeer dat losse koppeling tussen applicaties verhoogt.
+Alle vier de integratiestijlen kunnen gebruikt worden om oplossingen voor notificeren mee te realiseren. Ze zijn echter niet allemaal even geschikt en ook niet in alle situaties bruikbaar. Binnen de context van overheidsbreed notificeren geldt voor de verschillende stijlen:
+- 'Gedeelde database' stijl is niet bruikbaar omdat betrokken applicaties daarvoor toegang moeten hebben tot dezelfde database. Iets dat vaak onwenselijk of onmogelijk is, zeker als er verschillende organisaties bij betrokken zijn. We laten deze stijl daarom verder buiten beschouwing.
+- 'Bestandsuitwisseling' is bruikbaar als er het niet nodig is om snel na het optreden van gebeurtenissen te notificeren en/of als het gaat de uitwisseling van grote hoeveelheden gegevens. In lijn met het uitgangspunt dat we gegevens zoveel mogelijk bevragen bij bronregistraties en onnodig dupliceren van gegevens willen voorkomen is deze stijl voor de meeste situaties onwenselijk.
+- 'Externe applicatiefunctionaliteit aanroep' is bruikbaar om te notificeren maar heeft als groot nadeel dat er ongewenste afhankelijkheid tussen applicaties ontstaat. Zo moet de aangeroepen applicatie beschikbaar zijn op het moment van aanroep door de andere applicatie om notificatie succesvol te laten zijn.
+- 'Berichtuitwisseling' is in het algemeen de meest wenselijke stijl voor integratieoplossingen. Ook wanneer het oplossingen voor notificeren betreft. Door gegevens in zelfstandig te verwerken berichten te vatten zijn betrouwbare oplossingen te realiseren waarbij betrokken applicaties los van elkaar kunnen functioneren en specialistische functionaliteit bij verschillende applicaties is te beleggen. Zeker wanneer gebruik wordt gemaakt van asynchrone berichtuitwisseling.
+
+## Berichtuitwisseling en type berichten
+Bij berichtuitwisseling is onderscheid te maken in verschillende type berichten:
+1. Command message: een bericht dat een opdracht bevat voor de ontvangende applicatie (bijv. om een applicatiefunctie uit te voeren).
+2. Document message: een bericht dat gestructureerde gegevens zonder opdracht bevat, bedoeld om informatie over te brengen (bijv. statusinformatie over een plaatsgevonden verwerking)
+3. Event message: een bericht waarin gegevens over een plaatsgevonden gebeurtenis zijn opgenomen. In tegenstelling tot een document-message waarbij informatieoverdracht centraal staat is de primaire functie om kort na het optreden van een gebeurtenis ontvangende applicaties daarvan in kennis te stellen.
+
+Berichten kunnen van 1 type zijn of een combinatie daarvan. Zo kan een bericht bijv. gegevens bevatten dat de prijs van een product is verhoogd (event-message), maar ook artikelgegevens, inclusief de nieuwe prijs, bevatten (document-message). 
+
+In lijn met het uitgangspunt om in situaties waarin vertrouwelijke gegevens zijn betrokken informatie-arm te notificeren is het wenselijk om gebruik te maken van event-messages. Hiermee gerealiseerde data-minimalisatie en  uitvoering van authenticatie- en autorisatiecontroles bij opvraging uit bronregisters leidt tot beterer beveiliging en privacywaarborgen.
+
+## Notificatie patronen
+Voor het notificeren van applicaties zijn verschillende patronen beschikbaar. We richten ons hier met name op patronen waarbij gebruik wordt gemaakt van berichtuitwisseling als integratiestijl. 
+Binnen patronen is onderscheid te maken in basispatronen en uitgewerkte patronen die voortbouwen op basispatronen. Hieronder worden eerste enkele basispatronen beschreven die zelfstandig of in combinatie met andere patronen zijn te gebruiken voor oplossingen om te notificeren.
+
+### Basispatronen
+De beschrijving van basispatronen is grotendeels gebasserd op het boek 'Design Patterns: Elements of Reusable Object-Oriented Software' softwareontwerppatronen worden beschreven. Het betreft daarbij de ontwerppatronen die specifiek betrekking hebben op de communicatie tussen objecten.
+
+#### Observer patroon
+Doel: notificeren van applicaties waarbij zowel losse koppeling als consistentie nodig is.
+Synoniem: publish-subscribe
+> The Observer pattern describes how to establish these relationships.The key objects in this pattern are subject and observer. A subject may have any number of dependent observers. All observers are notified whenever the subject undergoes a change in state. In response, each observer will query the subjectto synchronize its state with the subject's state.
+Opmerkingen:
+- bij voorkeur hoeft het subject alleen plaatsgevonden gebeurtenissen te melden zonder kennis te hebben van het feit of, en zo ja hoeveel en welke, observers er zijn
+- naar aanleiding van een notificatie kunnen observers al dan niet meer informatie opvragen bij het subject
+- de feitelijke notificering van observers hoeft niet altijd door het subject zelf te worden uitgevoerd ('brokering')
+- het triggeren van notificeren kan zowel door subject als observer worden gedaan ('push vs pull') 
+- een subject moet garanderen dat de eigen status consistent is voor notificeren als opvraging n.a.v. notificatie mogelijk is.
+
+
+
+
+
+
+
+
+
+
+
 
 
 
