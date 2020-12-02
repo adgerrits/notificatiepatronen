@@ -70,6 +70,7 @@ Synoniem: publish-subscribe
 - Voorbeelden van gebruik van het Observer patroon zijn het Model-View-Controller model bij bij softwareontwikkeling en Publish-Subscribe mechanismen voor notificatie
 
 ![Observer pattern](/images/observer.png)
+<img src="/img/observer.png" alt="Observer pattern" style="height: 100px; width:100px;"/>
 
 ####
 
