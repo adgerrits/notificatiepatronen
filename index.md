@@ -1,15 +1,20 @@
+- [Inleiding](#inleiding)
 - [Terminologie en toelichting](#terminologie-en-toelichting)
 - [Patronen](#patronen)
-- [Conversatie](#conversatie)
-- [Integratie-stijlen](#integratie-stijlen)
-  - [Berichtuitwisseling en type berichten](#berichtuitwisseling-en-type-berichten)
-- [Basis-patronen, ook bruikbaar voor notificeren](#basis-patronen-ook-bruikbaar-voor-notificeren)
+  - [Conversatie patronen](#conversatie-patronen)
+  - [Integratie-stijlen](#integratie-stijlen)
+    - [Berichtuitwisseling en type berichten](#berichtuitwisseling-en-type-berichten)
+  - [Softwareontwikkel patronen](#softwareontwikkel-patronen)
     - [Observer patroon](#observer-patroon)
     - [Mediator pattern](#mediator-pattern)
 - [Patronen voor notificeren](#patronen-voor-notificeren)
   - [Event-Notification](#event-notification)
   - [Event-Carried State Transfer](#event-carried-state-transfer)
   - [Event-sourcing](#event-sourcing)
+
+# Inleiding
+
+Er zijn veel manieren waarop notificeren is te realiseren. Wat de meest geschikte manier is hangt af van de context. Er is daarom niet één manier die het beste is. Net zoals bij andere ontwerpuitdagingen zijn er wel 'patronen' die oplossingen voor vergelijkbare ontwerpuitdagingen beschrijven. Met behulp daarvan kan binnen de specifieke context gekomen worden tot een oplossing die gebruik maakt van bestaande kennis en ervaring. Hierna worden verschillende soorten patronen beschreven.
 
 # Terminologie en toelichting
 
@@ -27,30 +32,38 @@ Gebeurtenis-gedreven architectuur
 Notificeren
 : Het op de hoogte brengen van een partij van een plaatsgevonden gebeurtenis.
 
+Conversatie
+:
+
 # Patronen
 
 Patronen beschrijven zowel het "waarom" als het "hoe" van een voorgestelde oplossing. Ze lichten toe wanneer een oplossing geschikt is en wat de beperkingen zijn. Het zijn echter geen universele kopieer-en-plak-oplossingen: ze hebben allemaal sterke en zwakke punten. Het is essentieel om het juiste patroon voor het juiste doel te gebruiken zodat ontwikkelde oplossingen de vaak tegengestelde krachten en beperkingen in evenwicht te houden.
 
-Er zijn verschillende soorten patronen te onderscheiden:
+Er worden verschillende soorten patronen en stijlen onderscheiden die allemaal hun bijdrage kunnen leveren bij het komen tot goede oplossingen voor notificeren:
 
-- Conversatie patronen: patronen die beschrijven hoe los gekoppelde gedistribueerde services samen kunnen werken; met duidelijkheid in rollen en verantwoordelijkheden van iedere deelnemer aan de conversatie.
-- Ontwerp patronen: patronen die voor onderdelen van een conversatie beschrijven hoe benodigde functionaliteit is te ontwwerpen en realiseren.
+- Conversatie patronen: hoe kunnen gedistribueerde componenten via 2-weg verkeer met elkaar 'converseren'.
+- Integratie stijlen: hoe kan informatieuitwisseling tussen gedistribueerde softwarecomponenten worden gerealiseerd.
+- Softwareontwerp patronen: hoe kunnen softwarecomponenten gezamenljik worden ingezet
+- Notificatie stijlen en patronen: welke hoofdpatronen zijn te benoemen die specifiek voor notificeren bruikbaar zijn.
 
-# Conversatie
+## Conversatie patronen
 
-Een conversatie is een uitwisseling van individuele, maar gerelateerde berichten in de loop van de tijd. EEN gesprek bestaat uit de volgende elementen:
+Notificeren is te beschouwen als een 'conversatie' waarbij meerdere deelnemers zijn betrokken. In het geval van notifceren zijn er afspraken dat 1 deelnemer de rol van 'dienstenaanbieder' heeft en 1 of meer andere deelnemers de rol van 'dienstenafnemer' hebben. De dienst is het beschikbaar stellen van gegevens over plaatsgevonden gebeurtenissen binnen het domein van de dienstenaanbieder.
+Conversaties kunnen verschillende kenmerken hebben:
 
-- Het gesprek vindt plaats tussen twee of meer deelnemers. Het aantal deelnemers kunnen constant zijn of kunnen variëren naarmate het gesprek vordert. Een deelnemer treedt doorgaans op als initiator, d.w.z. het begint het gesprek door het eerste bericht te verzenden.
-- Deelnemers communiceren door berichten uit te wisselen. Elk bericht heeft één afzender en een of meer ontvangers.
-- Berichten kunnen worden geassocieerd of gecorreleerd aan het gesprek. Dit is meestal bereikt door het opnemen van een conversatie-ID of correlatie-ID in elk
-  bericht.
+- het aantal deelnemers kan constant zijn of kan variëren naarmate het gesprek vordert.
+- de aanbieder of afnemers kan initiator van de conversatie zijn
+- een bericht binnen de conversatie kan aan één of meer afnemers zijn gericht (maar heeft één afzender)
+- een gesprek kan uit één bericht bestaan, maar meestal kent een gesprek meerdere samenhangende berichten.
 
-Een vraag-antwoordgesprek kent twee deelnemersrollen: serviceprovider en een serviceconsument. Zowel de provider als de consument verzenden en ontvangen berichten waardoor het gesprek een zekere symmetrie krijgt. In het geval van notificeren is er sprake van een asymmetrische relatie: de provider maakt bekend welke gebeurtenissen binnen zijn domein hebben plaatsgevonden en stelt die beschikbaar voor afname de consument(en).
+Een vraag-antwoordgesprek is een voorbeeld waarbij een gesprek een zekere symmetrie kent: zowel de vrager als degene die het antwoord verstrekt verzenden en ontvangen berichten.
+In het geval van notificeren is er (meestal) sprake van een asymmetrische relatie: de aanbieder maakt bekend welke gebeurtenissen er hebben plaatsgevonden en stelt die beschikbaar voor afname aan afnemers.
 
-# Integratie-stijlen
+Bij het realiseren van oplossingen voor notificeren is het belangrijk goed te beschrijven welke rollen en verantwoordelijkheden er zijn en hoe conversaties er uit moeten gaan zien.
 
-Notificeren is een mechanisme om integratie tussen applicaties te realiseren door op een afgesproken manier gegevens met elkaar uit te wisselen.
-We onderscheiden 4 soorten integratiestijlen:
+## Integratie-stijlen
+
+Notificeren is een mechanisme om integratie tussen applicaties te realiseren door op een afgesproken manier gegevens met elkaar uit te wisselen. We onderscheiden 4 soorten integratiestijlen die in meer of minder mate geschikt zijn voor realisatie van oplossingen voor notificeren[^1]
 
 1. Gedeelde database ('Shared database'): Applicaties delen een database met gemeenschappelijk te gebruiken gegevens.
 2. Bestandsuitwisseling ('File transfer'): Applicaties produceren bestanden met gegevens die door andere applicaties worden ingelezen.
@@ -64,7 +77,7 @@ Alle vier de integratiestijlen kunnen gebruikt worden om oplossingen voor notifi
 - 'Externe applicatiefunctionaliteit aanroep' is bruikbaar om te notificeren maar heeft als groot nadeel dat er ongewenste afhankelijkheid tussen applicaties ontstaat. Zo moet de aangeroepen applicatie beschikbaar zijn op het moment van aanroep door de andere applicatie om notificatie succesvol te laten zijn.
 - 'Berichtuitwisseling' is in het algemeen de meest wenselijke stijl voor integratieoplossingen. Ook wanneer het oplossingen voor notificeren betreft. Door gegevens in zelfstandig te verwerken berichten te vatten zijn betrouwbare oplossingen te realiseren waarbij betrokken applicaties los van elkaar kunnen functioneren en specialistische functionaliteit bij verschillende applicaties is te beleggen. Zeker wanneer gebruik wordt gemaakt van asynchrone berichtuitwisseling.
 
-## Berichtuitwisseling en type berichten
+### Berichtuitwisseling en type berichten
 
 Bij berichtuitwisseling is onderscheid te maken in verschillende type berichten:
 
@@ -76,18 +89,19 @@ Berichten kunnen van 1 type zijn of een combinatie daarvan. Zo kan een bericht b
 
 In lijn met het uitgangspunt om in situaties waarin vertrouwelijke gegevens zijn betrokken informatie-arm te notificeren is het wenselijk om gebruik te maken van event-messages. Hiermee gerealiseerde data-minimalisatie en uitvoering van authenticatie- en autorisatiecontroles bij opvraging uit bronregisters leidt tot beterer beveiliging en privacywaarborgen.
 
-# Basis-patronen, ook bruikbaar voor notificeren
+## Softwareontwikkel patronen
 
 Voor het notificeren van applicaties zijn verschillende patronen beschikbaar. We richten ons hier met name op patronen waarbij gebruik wordt gemaakt van berichtuitwisseling als integratiestijl.
-Binnen patronen is onderscheid te maken in basispatronen en uitgewerkte patronen die voortbouwen op basispatronen. Hieronder worden eerste enkele basispatronen beschreven die zelfstandig of in combinatie met andere patronen zijn te gebruiken voor oplossingen om te notificeren.
-De beschrijving van basispatronen is grotendeels gebaseerd op het boek 'Design Patterns: Elements of Reusable Object-Oriented Software'.
+Binnen patronen is onderscheid te maken in basispatronen en meer specialistische patronen die voortbouwen op de basispatronen.
+Hieronder wordt steeds eerst een basispatroon beschreven. Dat kan zelfstandig of in combinatie met andere patronen worden gebruikt, ook voor notificatieoplossingen. Daarna worden specialistische patronen beschreven die voortbouwen op het basispatroon.
+'Design Patterns: Elements of Reusable Object-Oriented Software'.
 
 ### Observer patroon
 
 Functie: Het kunnen notificeren van applicaties waarbij applicaties los gekoppeld zijn.
 Synoniem: publish-subscribe
 
-> The Observer pattern describes how to establish these relationships.The key objects in this pattern are subject and observer. A subject may have any number of dependent observers. All observers are notified whenever the subject undergoes a change in state. In response, each observer will query the subjectto synchronize its state with the subject's state.
+> The Observer pattern describes how to establish these relationships.The key objects in this pattern are subject and observer. A subject may have any number of dependent observers. All observers are notified whenever the subject undergoes a change in state. In response, each observer will query the subjectto synchronize its state with the subject's state. <small>- Bron: “Design Patterns: Elements of Reusable Object-Oriented Software"</small>
 
 - Bij voorkeur hoeft het subject alleen plaatsgevonden gebeurtenissen te melden ('publiceren') zonder kennis te hebben van het feit of, en zo ja hoeveel en welke, observers er zijn.
 - Naar aanleiding van een notificatie kunnen observers al dan niet meer informatie opvragen bij het subject.
@@ -103,7 +117,7 @@ Synoniem: publish-subscribe
 Functie: Het faciliteren van communicatie tussen objecten via een mediator zodat ze niet direct gekoppeld hoeven te zijn.
 Synoniem: broker
 
-> Define an object that encapsulates how a set of objects interact. Mediator promotes loose coupling by keeping objects from referring toeach other explicitly, and it lets you vary their interaction independently.
+> Define an object that encapsulates how a set of objects interact. Mediator promotes loose coupling by keeping objects from referring toeach other explicitly, and it lets you vary their interaction independently. <small>- Bron: “Design Patterns: Elements of Reusable Object-Oriented Software"</small>
 
 - Voor het uitwisselen van berichten hoeven objecten niet met alle betrokken componenten relaties aan te gaan maar alleen met de mediator component.
 - Het mediator patroon bevordert losse koppeling tussen objecten en faciliteert het flexibel kunnen aanpassen van berichtuitwisseling.
@@ -144,3 +158,5 @@ Gebruik van dit patroon betekent in tegenstelling tot voorgaande patronen dat de
 - In tegenstelling tot klassieke registraties waarin de actuele toestand van gegevens wordt bijgehouden vormen bij event-sourcing de vastgelegde gebeurtenissen de 'single source of thruth'. Actuele informatie kan worden afgeleid door gebeurtenissen in volgorde 'af te spelen' of door een aparte te raadplegen registratie bij te houden waarin nieuwe gebeurtenissen leiden tot het actualiseren van gegevens.
 - Event sourcing is te implementeren via synchrone communicatie (bijv. Git) maar in gedistribueerde omgevingen wordt bij voorkeur gebruik gemaakt van asynchrone berichtuitwisseling.
 - Om het uitgangspunt 'Bevragen bij de bron' goed te kunnen realiseren moeten bronregisters (ook) gegevens kunnen leveren die golden op een tijdtip in het verleden ('historie'). Event log@@@
+
+[^1]: Bron: Enterprise Integration Patterns, Hohpe and Woolf:

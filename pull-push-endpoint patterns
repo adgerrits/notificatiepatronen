@@ -1,0 +1,35 @@
+Doel is afnemers te voorzien van informatie over plaatsgevonden gebeurtenissen
+- om actie te kunnen ondernemen
+- om lokale kopieen consistent te maken
+
+
+pull - Polling consumer
+    Nieuwe mutaties
+    Event sourcing
+
+push - Event driven consumer
+    Observer 
+    Event notification => Event Carried State transfer
+    * webhooks
+ - Mediator
+    * Pub sub 
+
+push & pull
+    Event sourcing + Event notification
+    
+    
+    
+Many of these patterns come in pairs that represent alternatives. You can design an endpoint one way or the other. A single application may design some endpoints one way and some endpoints the other way, but a single endpoint can only implement one alternative. Alternatives from each pair can be combined, leading to a great number of choices for how to implement a particular endpoint.
+
+Synchronous or asynchronous consumer — One alternative is whether to use a Polling Consumer or an Event-Driven Consumer. [JMS11, pp.68-69], [Hapner, p.13], [Dickman, p.29] Polling provides the best throttling because if the server is busy, it won’t run the code to receive more messages, so the messages will queue up. Consumers that are event-driven tend to process messages as fast as they arrive, which could overload the server; but each consumer can only process one message at a time, so limiting the number of consumers effectively throttles the consumption rate.
+
+Message assignment vs. message grab — Another alternative concerns how a handful of consumers process a handful of messages. If each consumer gets a message, they can process the messages concurrently. The simplest approach is Competing Consumers, where one Point-to-Point Channel has multiple consumers. Each one could potentially grab any message; the messaging system’s implementation decides which consumer gets a message. If you want to control this message-to-consumer matching process, use a Message Dispatcher. This is a single consumer that receives a message but delegates it to a performer for processing. An application can throttle message load by limiting the number of consumers/performers. Also, the dispatcher in a Message Dispatcher can implement explicit throttling behavior.
+
+Accept all messages or filter — By default, any message delivered on a Message Channel becomes available to any Message Endpoint listening on that channel for messages to consume. However, some consumers may not want to consume just any message on that channel, but only wish to consume messages of a certain type or description. Such a discriminating consumer can use a Selective Consumer to describe what sort of message it’s willing to receive. Then the messaging system will only make messages matching that description available to that receiver.
+
+Subscribe while disconnected — An issue that comes up with Publish-Subscribe Channels: What if a subscriber was interested in the data being published on a particular channel and will be again, but is currently disconnected from the network or shut down for maintenance? Will a disconnected application miss messages published while it is disconnected, even though it has subscribed? By default, yes, a subscription is only valid while the subscriber is connected. To keep the application from missing messages published inbetween connections, make it a Durable Subscriber.
+
+Idempotency — Sometimes the same message gets delivered more than once, either because the messaging system is not certain the message has been successfully delivered yet, or because the Message Channel’s quality-of-service has been lowered to improve performance. Message receivers, on the other hand, tend to assume that each message will be delivered exactly once, and tend to cause problems when they repeat processing because of repeat messages. A receiver designed as an Idempotent Receiver handles duplicate messages and prevents them from causing problems in the receiver application.
+
+Synchronous or asynchronous service — Another tough choice is whether an application should expose its services to be invoked synchronously (via Remote Procedure Invocation) or asynchronously (via Messaging). Different clients may prefer different approaches; different circumstances may require different approaches. Since it’s often hard to choose just one approach or the other, let’s have both. A Service Activator connects a Message Channel to a synchronous service in an application so that when a message is received, the service is invoked. Synchronous clients can simply invoke the service directly; asynchronous clients can invoke the service by sending a message.
+
