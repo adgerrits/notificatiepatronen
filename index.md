@@ -1,5 +1,5 @@
 Eerste opzetje:
 
 - [Terminologie](terminologie.md)
-- [Inleiding](Inleiding.md)
+- [Inleiding](inleiding.md)
 - [Patronen](patronen.md)
