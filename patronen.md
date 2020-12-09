@@ -5,9 +5,10 @@
   - [Synchroon en a-synchrone communicatie](#synchroon-en-a-synchrone-communicatie)
   - [Push en pull](#push-en-pull)
   - [Wel of niet gegarandeerde aflevering](#wel-of-niet-gegarandeerde-aflevering)
+  - [...](#)
+- [Integratie stijlen](#integratie-stijlen)
 - [Patronen](#patronen)
   - [Conversatie patronen](#conversatie-patronen)
-  - [Integratie-stijlen](#integratie-stijlen)
   - [Softwareontwikkel patronen](#softwareontwikkel-patronen)
     - [Observer patroon](#observer-patroon)
       - [Webhooks](#webhooks)
@@ -51,35 +52,9 @@ Opmerking: bij begrippen als 'gegarandeerd' en 'niet-gegarandeerd' geldt altijd 
 
 ---
 
-@@@ WIP
+## ...
 
-# Patronen
-
-Patronen beschrijven zowel het "waarom" als het "hoe" van een voorgestelde oplossing. Ze lichten toe wanneer een oplossing geschikt is en wat de beperkingen zijn. Het zijn echter geen universele kopieer-en-plak-oplossingen: ze hebben allemaal sterke en zwakke punten. Het is essentieel om het juiste patroon voor het juiste doel te gebruiken zodat ontwikkelde oplossingen de vaak tegengestelde krachten en beperkingen in evenwicht te houden.
-
-Er worden verschillende soorten patronen en stijlen onderscheiden die allemaal hun bijdrage kunnen leveren bij het komen tot goede oplossingen voor notificeren:
-
-- Conversatie patronen: hoe kunnen gedistribueerde componenten via 2-weg verkeer met elkaar 'converseren'.
-- Integratie stijlen: hoe kan informatieuitwisseling tussen gedistribueerde softwarecomponenten worden gerealiseerd.
-- Softwareontwerp patronen: hoe kunnen softwarecomponenten gezamenljik worden ingezet
-- Notificatie stijlen en patronen: welke hoofdpatronen zijn te benoemen die specifiek voor notificeren bruikbaar zijn.
-
-## Conversatie patronen
-
-Notificeren is te beschouwen als een 'conversatie' waarbij meerdere deelnemers zijn betrokken. In het geval van notifceren zijn er afspraken dat 1 deelnemer de rol van 'dienstenaanbieder' heeft en 1 of meer andere deelnemers de rol van 'dienstenafnemer' hebben. De dienst is het beschikbaar stellen van gegevens over plaatsgevonden gebeurtenissen binnen het domein van de dienstenaanbieder.
-Conversaties kunnen verschillende kenmerken hebben:
-
-- het aantal deelnemers kan constant zijn of kan variëren naarmate het gesprek vordert.
-- de aanbieder of afnemers kan initiator van de conversatie zijn
-- een bericht binnen de conversatie kan aan één of meer afnemers zijn gericht (maar heeft één afzender)
-- een gesprek kan uit één bericht bestaan, maar meestal kent een gesprek meerdere samenhangende berichten.
-
-Een vraag-antwoordgesprek is een voorbeeld waarbij een gesprek een zekere symmetrie kent: zowel de vrager als degene die het antwoord verstrekt verzenden en ontvangen berichten.
-In het geval van notificeren is er (meestal) sprake van een asymmetrische relatie: de aanbieder maakt bekend welke gebeurtenissen er hebben plaatsgevonden en stelt die beschikbaar voor afname aan afnemers.
-
-Bij het realiseren van oplossingen voor notificeren is het belangrijk goed te beschrijven welke rollen en verantwoordelijkheden er zijn en hoe conversaties er uit moeten gaan zien.
-
-## Integratie-stijlen
+# Integratie stijlen
 
 Notificeren is een mechanisme om integratie tussen applicaties te realiseren door op een afgesproken manier gegevens met elkaar uit te wisselen. We onderscheiden 4 soorten integratiestijlen die in meer of minder mate geschikt zijn voor realisatie van oplossingen voor notificeren[^1]
 
@@ -109,7 +84,7 @@ Bij berichtuitwisseling is onderscheid te maken in verschillende type berichten:
 
 Berichten kunnen van 1 type zijn of een combinatie daarvan. Zo kan een bericht bijv. gegevens bevatten dat de prijs van een product is verhoogd (event-message), maar ook artikelgegevens, inclusief de nieuwe prijs, bevatten (document-message).
 
-In lijn met het uitgangspunt om in situaties waarin vertrouwelijke gegevens zijn betrokken informatie-arm te notificeren is het wenselijk om gebruik te maken van event-messages. Hiermee gerealiseerde data-minimalisatie en uitvoering van authenticatie- en autorisatiecontroles bij opvraging uit bronregisters leidt tot beterer beveiliging en privacywaarborgen.
+In lijn met het uitgangspunt om in situaties waarin vertrouwelijke gegevens zijn betrokken informatie-arm te notificeren is het wenselijk om gebruik te maken van event-messages. Hiermee zijn beveiliging en privacy beter waarborgen via dataminimalisatie en eenmalige passende authenticatie- en autorisatie voorafgaand aan opvraging uit bronregisters.
 
 ---
 
@@ -124,6 +99,32 @@ Een andere reden om voor event-messages te kiezen is als afnemers grote hoeveelh
 **We maken gebruik van event-messages als bij notificatie grote hoeveelheden gegevens zijn betrokken.**
 
 ---
+
+# Patronen
+
+Patronen beschrijven zowel het "waarom" als het "hoe" van een voorgestelde oplossing. Ze lichten toe wanneer een oplossing geschikt is en wat de beperkingen zijn. Het zijn echter geen universele kopieer-en-plak-oplossingen: ze hebben allemaal sterke en zwakke punten. Het is essentieel om het juiste patroon voor het juiste doel te gebruiken zodat ontwikkelde oplossingen de vaak tegengestelde krachten en beperkingen in evenwicht te houden.
+
+Er worden verschillende soorten patronen en stijlen onderscheiden die allemaal hun bijdrage kunnen leveren bij het komen tot goede oplossingen voor notificeren:
+
+- Conversatie patronen: hoe kunnen gedistribueerde componenten via 2-weg verkeer met elkaar 'converseren'.
+- Integratie stijlen: hoe kan informatieuitwisseling tussen gedistribueerde softwarecomponenten worden gerealiseerd.
+- Softwareontwerp patronen: hoe kunnen softwarecomponenten gezamenljik worden ingezet
+- Notificatie stijlen en patronen: welke hoofdpatronen zijn te benoemen die specifiek voor notificeren bruikbaar zijn.
+
+## Conversatie patronen
+
+Notificeren is te beschouwen als een 'conversatie' waarbij meerdere deelnemers zijn betrokken. In het geval van notifceren zijn er afspraken dat 1 deelnemer de rol van 'dienstenaanbieder' heeft en 1 of meer andere deelnemers de rol van 'dienstenafnemer' hebben. De dienst is het beschikbaar stellen van gegevens over plaatsgevonden gebeurtenissen binnen het domein van de dienstenaanbieder.
+Conversaties kunnen verschillende kenmerken hebben:
+
+- het aantal deelnemers kan constant zijn of kan variëren naarmate het gesprek vordert.
+- de aanbieder of afnemers kan initiator van de conversatie zijn
+- een bericht binnen de conversatie kan aan één of meer afnemers zijn gericht (maar heeft één afzender)
+- een gesprek kan uit één bericht bestaan, maar meestal kent een gesprek meerdere samenhangende berichten.
+
+Een vraag-antwoordgesprek is een voorbeeld waarbij een gesprek een zekere symmetrie kent: zowel de vrager als degene die het antwoord verstrekt verzenden en ontvangen berichten.
+In het geval van notificeren is er (meestal) sprake van een asymmetrische relatie: de aanbieder maakt bekend welke gebeurtenissen er hebben plaatsgevonden en stelt die beschikbaar voor afname aan afnemers.
+
+Bij het realiseren van oplossingen voor notificeren is het belangrijk goed te beschrijven welke rollen en verantwoordelijkheden er zijn en hoe conversaties er uit moeten gaan zien.
 
 ## Softwareontwikkel patronen
 
