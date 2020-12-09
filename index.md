@@ -3,9 +3,9 @@
 - [Patronen](#patronen)
   - [Conversatie patronen](#conversatie-patronen)
   - [Integratie-stijlen](#integratie-stijlen)
-    - [Berichtuitwisseling en type berichten](#berichtuitwisseling-en-type-berichten)
   - [Softwareontwikkel patronen](#softwareontwikkel-patronen)
     - [Observer patroon](#observer-patroon)
+      - [Webhooks](#webhooks)
     - [Mediator pattern](#mediator-pattern)
 - [Patronen voor notificeren](#patronen-voor-notificeren)
   - [Event-Notification](#event-notification)
@@ -77,7 +77,11 @@ Alle vier de integratiestijlen kunnen gebruikt worden om oplossingen voor notifi
 - 'Externe applicatiefunctionaliteit aanroep' is bruikbaar om te notificeren maar heeft als groot nadeel dat er ongewenste afhankelijkheid tussen applicaties ontstaat. Zo moet de aangeroepen applicatie beschikbaar zijn op het moment van aanroep door de andere applicatie om notificatie succesvol te laten zijn.
 - 'Berichtuitwisseling' is in het algemeen de meest wenselijke stijl voor integratieoplossingen. Ook wanneer het oplossingen voor notificeren betreft. Door gegevens in zelfstandig te verwerken berichten te vatten zijn betrouwbare oplossingen te realiseren waarbij betrokken applicaties los van elkaar kunnen functioneren en specialistische functionaliteit bij verschillende applicaties is te beleggen. Zeker wanneer gebruik wordt gemaakt van asynchrone berichtuitwisseling.
 
-### Berichtuitwisseling en type berichten
+---
+
+**We gebruiken bij voorkeur berichtuitwisseling als integratiestijl voor notificeren.**
+
+---
 
 Bij berichtuitwisseling is onderscheid te maken in verschillende type berichten:
 
@@ -88,6 +92,20 @@ Bij berichtuitwisseling is onderscheid te maken in verschillende type berichten:
 Berichten kunnen van 1 type zijn of een combinatie daarvan. Zo kan een bericht bijv. gegevens bevatten dat de prijs van een product is verhoogd (event-message), maar ook artikelgegevens, inclusief de nieuwe prijs, bevatten (document-message).
 
 In lijn met het uitgangspunt om in situaties waarin vertrouwelijke gegevens zijn betrokken informatie-arm te notificeren is het wenselijk om gebruik te maken van event-messages. Hiermee gerealiseerde data-minimalisatie en uitvoering van authenticatie- en autorisatiecontroles bij opvraging uit bronregisters leidt tot beterer beveiliging en privacywaarborgen.
+
+---
+
+**We maken gebruik van event-messages als bij notificatie vertrouwelijke gegevens zijn betrokken.**
+
+---
+
+Een andere reden om voor event-messages te kiezen is als afnemers grote hoeveelheden gegevens willen ontvangen na het optreden van bepaalde gebeurtenissen. In die situaties kunnen zij via event-messages op de hoogte worden gebracht van het optreden van een gebeurtenis en kunnen zij naar aanleiding daarvan alle gewenste gegevens gaan ophalen bij de aanbieder. Deze manier van stuurgegevens over een kanaal sturen en de inhoudelijke gegevens via een ander kanaal wordt ook wel aangeduid als 'out-of-band control'. Hiermee wordt voorkomen dat voorzieningen die met name bedoeld zijn voor het verwerken van berichten van beperkte omvang overbelast raken.
+
+---
+
+**We maken gebruik van event-messages als bij notificatie grote hoeveelheden gegevens zijn betrokken.**
+
+---
 
 ## Softwareontwikkel patronen
 
@@ -101,16 +119,24 @@ Hieronder wordt steeds eerst een basispatroon beschreven. Dat kan zelfstandig of
 Functie: Het kunnen notificeren van applicaties waarbij applicaties los gekoppeld zijn.
 Synoniem: publish-subscribe
 
-> The Observer pattern describes how to establish these relationships.The key objects in this pattern are subject and observer. A subject may have any number of dependent observers. All observers are notified whenever the subject undergoes a change in state. In response, each observer will query the subjectto synchronize its state with the subject's state. <small>- Bron: “Design Patterns: Elements of Reusable Object-Oriented Software"</small>
+> The Observer pattern describes how to establish these relationships.The key objects in this pattern are subject and observer. A subject may have any number of dependent observers. All observers are notified whenever the subject undergoes a change in state. In response, each observer will query the subjectto synchronize its state with the subject's state[^2].
 
 - Bij voorkeur hoeft het subject alleen plaatsgevonden gebeurtenissen te melden ('publiceren') zonder kennis te hebben van het feit of, en zo ja hoeveel en welke, observers er zijn.
 - Naar aanleiding van een notificatie kunnen observers al dan niet meer informatie opvragen bij het subject.
 - Het triggeren van notificeren kan zowel door subject als observer worden gedaan ('push vs pull').
 - Notificeren verloopt efficienter als observers specificeren voor welke gebeurtenissen ('aspects') zij genotificeerd willen worden.
-- Het Observer patroon wordt veel toegepast bij softwareontwikkeling waar onderdelen elkaar (vaak synchroon) notificeren. Bijv. bij gebruik van het Model-View-Controller model. Wanneer sprake is van componenten in gescheiden omgevingen kan daarvoor bijv. de RPC-integratiestijl worden toegepast.
-- Notificering van observers hoeft niet altijd door het subject zelf te worden uitgevoerd. Hiervoor kan een apart object ('change manager') worden ingeschakeld. Deze implementatie van het Observer patroon duidt men vaak aan als het Publisher-Subscriber ('PubSub') patroon waarbij (asynchrone) communicatie tussen subject en observers verloopt via een tussenliggende component ('broker'). Dit patroon is bijv. bruikbaar voor notificeren wanneer subject en observers los gekoppeld moeten zijn.
+- Het Observer patroon kan binnen verschillende integratiestijlen worden toegepast (bijv. bij RPC of Messaging). De communicatie verloopt meestal synchroon.
+- Notificering van observers hoeft niet altijd door het subject zelf te worden uitgevoerd. Hiervoor kan een apart object ('change manager') worden ingeschakeld. Deze implementatie van het Observer patroon wordt vaak aangeduid als het Publisher-Subscriber ('PubSub') patroon waarbij (asynchrone) communicatie tussen subject en observers verloopt via een tussenliggende component ('broker'). Dit patroon is bruikbaar als losse koppeling tussen subject en observers belangrijk is. Het patroon wordt later apart toegelicht.
 
 ![Observer pattern](images/observer.png)
+
+#### Webhooks
+
+Webhooks zijn een implementatie van het observer pattern.
+
+> Webhooks zijn "door de gebruiker gedefinieerde HTTP-callbacks". Ze worden meestal geactiveerd door een gebeurtenis, zoals het pushen van code naar een opslagplaats of het plaatsen van een opmerking op een blog. Als die gebeurtenis plaatsvindt, doet de bronsite een HTTP-verzoek naar de URL die voor de webhook is geconfigureerd. Gebruikers kunnen ze zo configureren dat gebeurtenissen op de ene site gedrag op een andere site oproepen. - Bron: [Wikipedia](https://en.wikipedia.org/wiki/Webhook)
+
+@@@
 
 ### Mediator pattern
 
@@ -159,4 +185,5 @@ Gebruik van dit patroon betekent in tegenstelling tot voorgaande patronen dat de
 - Event sourcing is te implementeren via synchrone communicatie (bijv. Git) maar in gedistribueerde omgevingen wordt bij voorkeur gebruik gemaakt van asynchrone berichtuitwisseling.
 - Om het uitgangspunt 'Bevragen bij de bron' goed te kunnen realiseren moeten bronregisters (ook) gegevens kunnen leveren die golden op een tijdtip in het verleden ('historie'). Event log@@@
 
-[^1]: Bron: Enterprise Integration Patterns, Hohpe and Woolf:
+[^1]: Bron: Enterprise Integration Patterns, Gregor Hohpe, Bobby Woolf:
+[^2]: Bron: “Design Patterns: Elements of Reusable Object-Oriented Software" - The "Gang of Four": Erich Gamma, Richard Helm, Ralph Johnson, John Vlissides
