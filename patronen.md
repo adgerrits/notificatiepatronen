@@ -48,7 +48,7 @@ Opmerking: bij begrippen als 'gegarandeerd' en 'niet-gegarandeerd' geldt altijd 
 
 ---
 
-**We gebruiken bij notificeren bij voorkeur met gegarandeerde aflevering van notificaties.**
+**We gebruiken bij aflevering van notificaties bij voorkeur gegarandeerde aflevering.**
 
 ---
 
