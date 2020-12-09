@@ -14,7 +14,7 @@
 
 # Inleiding
 
-Er zijn veel manieren waarop notificeren is te realiseren. Wat de meest geschikte manier is hangt af van de context. Er is daarom niet één manier die het beste is. Net zoals bij andere ontwerpuitdagingen zijn er wel 'patronen' die oplossingen voor vergelijkbare ontwerpuitdagingen beschrijven. Met behulp daarvan kan binnen de specifieke context gekomen worden tot een oplossing die gebruik maakt van bestaande kennis en ervaring. Hierna worden verschillende soorten patronen beschreven.
+woe - Er zijn veel manieren waarop notificeren is te realiseren. Wat de meest geschikte manier is hangt af van de context. Er is daarom niet één manier die het beste is. Net zoals bij andere ontwerpuitdagingen zijn er wel 'patronen' die oplossingen voor vergelijkbare ontwerpuitdagingen beschrijven. Met behulp daarvan kan binnen de specifieke context gekomen worden tot een oplossing die gebruik maakt van bestaande kennis en ervaring. Hierna worden verschillende soorten patronen beschreven.
 
 # Terminologie en toelichting
 
