@@ -1,3 +1,5 @@
+[Home](index.md)
+
 - [Inleiding](#inleiding)
 - [Niet-inhoudelijke aspecten](#niet-inhoudelijke-aspecten)
   - [Synchroon en a-synchrone communicatie](#synchroon-en-a-synchrone-communicatie)
