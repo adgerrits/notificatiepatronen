@@ -24,7 +24,7 @@
     - [Event-Notification](#event-notification)
     - [Event-Carried State Transfer](#event-carried-state-transfer)
     - [Event-sourcing](#event-sourcing)
-  - [Inrichting scenarios](#inrichting-scenarios)
+- [Inrichting scenarios](#inrichting-scenarios)
 
 # Inleiding
 
@@ -234,7 +234,7 @@ Gebruik van dit patroon betekent in tegenstelling tot voorgaande patronen dat de
 - Event sourcing is te implementeren via synchrone communicatie (bijv. Git) maar in gedistribueerde omgevingen wordt bij voorkeur gebruik gemaakt van asynchrone berichtuitwisseling.
 - Om het uitgangspunt 'Bevragen bij de bron' goed te kunnen realiseren moeten bronregisters (ook) gegevens kunnen leveren die golden op een tijdtip in het verleden ('historie'). Event log@@@
 
-## Inrichting scenarios
+# Inrichting scenarios
 
 [^1]: Bron: Enterprise Integration Patterns, Gregor Hohpe, Bobby Woolf:
 [^2]: Bron: “Design Patterns: Elements of Reusable Object-Oriented Software" - The "Gang of Four": Erich Gamma, Richard Helm, Ralph Johnson, John Vlissides
