@@ -5,7 +5,9 @@
   - [Synchroon en a-synchrone communicatie](#synchroon-en-a-synchrone-communicatie)
   - [Push en pull](#push-en-pull)
   - [Wel of niet gegarandeerde aflevering](#wel-of-niet-gegarandeerde-aflevering)
-  - [...](#)
+  - [1- of 2-weg communicatie](#1--of-2-weg-communicatie)
+  - [Signalen of replicatie](#signalen-of-replicatie)
+  - [Fire-and-forget of request-response](#fire-and-forget-of-request-response)
 - [Integratie stijlen](#integratie-stijlen)
 - [Patronen](#patronen)
   - [Conversatie patronen](#conversatie-patronen)
@@ -39,12 +41,13 @@ Systemen kunnen voor notificatie gebruik maken van synchrone communicatie. Bijvo
 ## Push en pull
 
 Notificaties kunnen door het notificerende systeem richting afnemende systemen worden gebracht ('push'). Bijv. als afnemende systemen zo snel mogelijk genotificeerd willen worden. Afnemende systemen kunnen ook zelf beschikbaar gestelde notificaties gaan ophalen ('pull'). Bijv. omdat ze zelf het moment van verwerken willen bepalen of omdat er van hele grote notificatieberichten sprake is. Tenslotte kan er ook een combinatie van beide mechanismen worden gebruikt. Bijv. door eerst een klein notificatiebericht te sturen ('push') met de melding dat er een groot notificatiebericht kan worden opgehaald ('pull'). Er is geen duidelijke voorkeur welk(e) (combinatie van) mechanismes toegepast worden voor notificeren.
+Opmerking: In plaats van 'push of pull' wordt soms ook gesproken over 'request-response of event-based' notificeren.
 Opmerking: het eerder geformuleerde uitgangspunt dat het notificerende systeem zo snel mogelijk nadat een gebeurtenis heeft plaatsgevonden de notificatie daarvan beschikbaar stelt is bij toepassing van beide mechanismen van belang.
 
 ## Wel of niet gegarandeerde aflevering
 
-Het kan voor zowel het notificerende, maar vooral voor ontvangende systemen van belang zijn, dat notificaties 'gegarandeerd' worden ontvangen. Gezien de context waarbinnen we notificeren geldt dat het vaak nodig zal zijn. Het kan echter zodanig grote (extra) inspanningen en investeringen vergen dat in bepaalde situaties genoegen wordt genomen met niet-gegarandeerde aflevering.
-Opmerking: bij begrippen als 'gegarandeerd' en 'niet-gegarandeerd' geldt altijd dat de context bepalend is voor welke mate van onzekerheid acceptabel is.
+Het kan voor zowel het notificerende, maar vooral voor ontvangende systemen van belang zijn, dat notificaties 'gegarandeerd' worden ontvangen. Bij uitwisseling van gegevens tussen overheidsorganisaties zal gegarandeerde aflevering regelmatig nodig zijn. Omdat dit niet eenvoudig is te realiseren zal daarbij vaak gebruik worden gemaakt van gespecialiseerde ondersteunende standaarden (bijv. Digikoppeling) of en systemen (bijv. 'message-oriented middleware').
+Opmerking: bij begrippen als 'gegarandeerd' en 'niet-gegarandeerd' geldt dat de acceptabele hoeveel onzekerheid contextafhankelijk is. Op basis van een uitgevoerde kosten/baten analyse kan bijv. besloten worden om te kiezen voor een oplossing waarbij aflevering niet, deels of volledig is gegarandeerd.
 
 ---
 
@@ -52,7 +55,17 @@ Opmerking: bij begrippen als 'gegarandeerd' en 'niet-gegarandeerd' geldt altijd 
 
 ---
 
-## ...
+## 1- of 2-weg communicatie
+
+Soms is het voor het notificerende systeem belangrijk om een reactie van het genotificeerde systeem te krijgen. Bijv. om te horen of een verwerking naar aanleiding van een notificatie (bijv. een betaling) wel of niet succesvol is uitgevoerd. In die gevallen zal een oplossing 2-weg verkeer moeten ondersteunen.
+In veel gevallen hoeft het notificerende systeem niet te weten welke afnemers er zijn en wat zij met notificaties doen. Dan volstaat 1-weg communicatie. Idealiter is het notificerende systeem dan klaar als het een notificatie beschikbaar heeft gesteld ('fire and forget').
+Opmerking: het feit dat een afnemer een statuscode terugstuurt naar aanleiding van een ontvangen bericht zien we binnen deze context niet als 2-weg communicatie.
+
+## Signalen of replicatie
+
+@@@
+
+## Fire-and-forget of request-response
 
 # Integratie stijlen
 
