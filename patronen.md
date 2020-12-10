@@ -7,6 +7,10 @@
   - [Wel of niet gegarandeerde aflevering](#wel-of-niet-gegarandeerde-aflevering)
   - [1- of 2-weg communicatie](#1--of-2-weg-communicatie)
   - [Signalen of replicatie](#signalen-of-replicatie)
+  - [Met zonder gegevens](#met-zonder-gegevens)
+  - [Domeingebeurtenissen](#domeingebeurtenissen)
+  - [formeel / informeel](#formeel--informeel)
+  - [informatierijk / informatiearm](#informatierijk--informatiearm)
   - [Fire-and-forget of request-response](#fire-and-forget-of-request-response)
 - [Integratie stijlen](#integratie-stijlen)
 - [Patronen](#patronen)
@@ -16,10 +20,11 @@
       - [Webhooks](#webhooks)
     - [Mediator pattern](#mediator-pattern)
       - [Publish subscribe pattern](#publish-subscribe-pattern)
-- [Patronen specifiek voor notificeren](#patronen-specifiek-voor-notificeren)
-  - [Event-Notification](#event-notification)
-  - [Event-Carried State Transfer](#event-carried-state-transfer)
-  - [Event-sourcing](#event-sourcing)
+  - [Patronen specifiek voor notificeren](#patronen-specifiek-voor-notificeren)
+    - [Event-Notification](#event-notification)
+    - [Event-Carried State Transfer](#event-carried-state-transfer)
+    - [Event-sourcing](#event-sourcing)
+  - [Inrichting scenarios](#inrichting-scenarios)
 
 # Inleiding
 
@@ -62,6 +67,14 @@ In veel gevallen hoeft het notificerende systeem niet te weten welke afnemers er
 Opmerking: het feit dat een afnemer een statuscode terugstuurt naar aanleiding van een ontvangen bericht zien we binnen deze context niet als 2-weg communicatie.
 
 ## Signalen of replicatie
+
+## Met zonder gegevens
+
+## Domeingebeurtenissen
+
+## formeel / informeel
+
+## informatierijk / informatiearm
 
 @@@
 
@@ -186,11 +199,11 @@ Synoniem: broker
 
 @@@ wip
 
-# Patronen specifiek voor notificeren
+## Patronen specifiek voor notificeren
 
 Afhankelijk van de context kan notificeren verschillende doelen hebben en passen daarbij verschillende patronen.
 
-## Event-Notification
+### Event-Notification
 
 Een applicatie levert notificaties ('event messages') om andere applicaties te informeren dat er een gebeurtenis binnen het applicatiedomein heeft plaatsgevonden.
 
@@ -198,7 +211,7 @@ Een applicatie levert notificaties ('event messages') om andere applicaties te i
 - Ontvangers kunnen zelf beslissen of een notificatie aanleiding geeft om actie te ondernemen (bijv. opvragen van detailgegevens of het starten van een proces).
 - Wanneer gegevens worden 'opgevraagd bij de bron' is notificatie nodig om te weten dat er mogelijk relevante gebeurtenissen hebben plaatsgevonden in het bron-domein.
 
-## Event-Carried State Transfer
+### Event-Carried State Transfer
 
 Een applicatie levert notificaties zodat ontvangers lokaal opgeslagen gegevens kunnen bijwerken ('replicatie') en ze bij benodigd gebruik geen gegevens bij de verzender hoeven op te vragen.
 
@@ -208,7 +221,7 @@ Een applicatie levert notificaties zodat ontvangers lokaal opgeslagen gegevens k
 
 In lijn met het uitgangspunt 'Opvragen bij de bron' zien we dit patroon als onwenselijk wanneer ontvangers brongegevens kunnen opvragen en via Event-notification op de hoogte gesteld kunnen worden van relevante wijzigingen in het brondomein.
 
-## Event-sourcing
+### Event-sourcing
 
 Een applicatie legt gebeurtenissen vast ('event log') in een door afnemers raadpleegbare registratie ('event source').
 Gebruik van dit patroon betekent in tegenstelling tot voorgaande patronen dat de communicatierichting verandert. Informatie over plaatsgevonden gebeurtenissen wordt niet gebracht ('push') maar afnemers gaan die zelf ophalen ('pull').
@@ -220,6 +233,8 @@ Gebruik van dit patroon betekent in tegenstelling tot voorgaande patronen dat de
 - In tegenstelling tot klassieke registraties waarin de actuele toestand van gegevens wordt bijgehouden vormen bij event-sourcing de vastgelegde gebeurtenissen de 'single source of thruth'. Actuele informatie kan worden afgeleid door gebeurtenissen in volgorde 'af te spelen' of door een aparte te raadplegen registratie bij te houden waarin nieuwe gebeurtenissen leiden tot het actualiseren van gegevens.
 - Event sourcing is te implementeren via synchrone communicatie (bijv. Git) maar in gedistribueerde omgevingen wordt bij voorkeur gebruik gemaakt van asynchrone berichtuitwisseling.
 - Om het uitgangspunt 'Bevragen bij de bron' goed te kunnen realiseren moeten bronregisters (ook) gegevens kunnen leveren die golden op een tijdtip in het verleden ('historie'). Event log@@@
+
+## Inrichting scenarios
 
 [^1]: Bron: Enterprise Integration Patterns, Gregor Hohpe, Bobby Woolf:
 [^2]: Bron: “Design Patterns: Elements of Reusable Object-Oriented Software" - The "Gang of Four": Erich Gamma, Richard Helm, Ralph Johnson, John Vlissides
